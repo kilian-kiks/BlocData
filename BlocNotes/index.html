@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlocDATA</title>
+    <link rel="icon" type="image/png" href="blocdata_logo.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+
+    <div id="lock-screen" data-status="locked">
+        <div class="lock-box">
+            <h2>SYSTEM ACCESS REQUIRED</h2>
+            <p class="lock-hint">ENTRER LE CODE DE SÉCURITÉ :</p>
+            <input type="password" id="code-input" placeholder="********" autocomplete="off">
+            <button id="submit-code-btn">VALIDER</button>
+            <p id="error-message"></p>
+            <div style="margin: 20px 0;">
+        </div>
+    </div>
+</div>
+
+    <header class="cyber-header">
+        <button class="tab-btn active" data-target="notes-section">BLOC-NOTES</button>
+        <button class="tab-btn" data-target="store-section">MAGASIN 🛒</button>
+        <button class="tab-btn" data-target="terminal-section">ASSISTANT 🤖</button>
+        <button class="tab-btn" data-target="graph-section">GRAPHES 📊</button>
+        <button class="tab-btn" data-target="config-section">CONFIG ⚙️</button>
+    </header>
+
+    <main id="notes-section" class="tab-content active-content">
+        <div class="app-container">
+            
+            <aside class="sidebar">
+                <h3>DOSSIERS</h3>
+                <p class="sidebar-hint">Appuie sur "T" pour en créer un</p>
+                <ul id="folder-list">
+                    </ul>
+            </aside>
+
+            <section class="editor-container">
+                <h2 id="current-folder-title">Sélectionnez ou créez un dossier</h2>
+    <div id="last-updated-zone" style="font-size: 12px; color: #888; font-family: monospace;"></div>
+    
+    <div id="folder-unlock-zone" style="display: none; text-align: center; padding: 40px 20px; border: 1px dashed #ff0055; background: rgba(20, 0, 0, 0.4); margin: 20px 0;">
+                    <h3 style="color: #ff0055; text-shadow: 0 0 5px #ff0055; margin-top: 0;">🔒 DOSSIER CHIFFRÉ / ACCÈS RESTREINT</h3>
+                    <p style="font-size: 12px; color: #888;">VEUILLEZ SAISIR LE CODE DE DÉCHIFFREMENT :</p>
+                    <input type="password" id="folder-unlock-input" placeholder="****" style="background: #000; border: 1px solid #ff0055; color: #ff0055; padding: 10px; text-align: center; font-size: 16px; width: 150px; font-family: monospace; letter-spacing: 2px;">
+                    <button id="folder-unlock-btn" style="background: #ff0055; color: #000; border: none; padding: 10px 15px; font-weight: bold; cursor: pointer; margin-left: 10px; font-family: monospace;">DECRYPT</button>
+                    <p id="folder-unlock-error" style="color: #ff0055; font-size: 12px; margin-top: 10px; font-weight: bold;"></p>
+                </div>
+    
+    <textarea id="note-zone" placeholder="Commence à écrire tes notes ici..." disabled></textarea>
+                
+                <div class="editor-footer">
+                    <button id="clear-btn">Tout effacer</button>
+                    
+                    <div class="counters-zone">
+                        <span id="char-count">0 caractère</span> | <span id="word-count">0 mot</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <main id="store-section" class="tab-content">
+        <div class="store-container">
+            
+            <div class="admin-shop-box">
+                <h3>--- AJOUTER UN ACCESSOIRE ---</h3>
+                <div class="shop-form-group">
+                    <input type="text" id="shop-name" placeholder="Nom de l'objet (Ex: Chaise SIHOO M18)" autocomplete="off">
+                    <input type="text" id="shop-price" placeholder="Prix (Ex: 149,99 €)" autocomplete="off">
+                    <input type="text" id="shop-link" placeholder="Lien Amazon (https://...)" autocomplete="off">
+                    <input type="text" id="shop-img" placeholder="Lien de l'image (URL)" autocomplete="off">
+                    <button id="add-product-btn">+ AJOUTER AU MAGASIN</button>
+                </div>
+            </div>
+
+            <h1>Le Magasin 🛒</h1>
+            <p class="store-intro">Bienvenue dans la boutique ! Personnalise ton expérience en achetant des accessoires.</p>
+            
+            <div id="shop-products-container" class="products-grid">
+                </div>
+
+        </div>
+    </main>
+
+   <div id="command-overlay" style="display: none;">
+        <div class="command-box">
+            <label for="command-input">ENTRER LE NOM DU DOSSIER :</label>
+            <input type="text" id="command-input" placeholder="Ex: Cours, Projets..." autocomplete="off">
+            
+            <div class="color-selector">
+                <div class="color-btn selected" data-color="green" style="background: #00ff66;"></div>
+                <div class="color-btn" data-color="red" style="background: #ff0055;"></div>
+                <div class="color-btn" data-color="blue" style="background: #00f0ff;"></div>
+                <div class="color-btn" data-color="yellow" style="background: #ffcc00;"></div>
+            </div>
+
+            <div style="margin: 20px 0; border-top: 1px dashed #00ff66; padding-top: 15px;">
+                <label style="cursor: pointer; display: inline-flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="private-folder-checkbox" style="transform: scale(1.3); accent-color: #00ff66;">
+                    🔒 RENDRE CE DOSSIER PRIVÉ
+                </label>
+                <div id="folder-password-group" style="display: none; margin-top: 15px;">
+                    <label for="folder-password-input" style="font-size: 12px; color: #ff0055;">DÉFINIR LE CODE DU DOSSIER :</label>
+                    <input type="password" id="folder-password-input" placeholder="****" style="width: 60%; background: #000; border: 1px solid #ff0055; color: #ff0055; padding: 5px; text-align: center; font-family: monospace;">
+                </div>
+            </div>
+            
+            <p class="command-hint">Appuie sur ENTRÉE pour valider, ÉCHAP pour annuler</p>
+        </div>
+    </div>
+
+    <main id="terminal-section" class="tab-content">
+        <div class="store-container">
+            <h1>Assistant Terminal 🤖</h1>
+            <p class="store-intro">Console système d'aide à la gestion de tes fichiers.</p>
+            
+            <div id="terminal-log" style="background: #000; border: 1px solid #00ff66; height: 350px; padding: 15px; overflow-y: auto; font-family: monospace; color: #00ff66; margin-bottom: 15px; box-shadow: 0 0 15px rgba(0,255,102,0.1);">
+                <div style="color: #888;">[SYSTEM CORE INITIALIZED] Saisissez /aide pour voir les fonctions.</div>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <span style="color: #00ff66; font-size: 18px; font-weight: bold; align-self: center;">&gt;</span>
+                <input type="text" id="terminal-input" placeholder="Entrer une commande (ex: /aide)..." autocomplete="off" style="flex: 1; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-family: monospace; font-size: 16px;">
+            </div>
+        </div>
+    </main>
+
+    <main id="graph-section" class="tab-content">
+        <div class="store-container">
+            <h1>Analyseur Statistique 📊</h1>
+            <p class="store-intro">Entrez vos données numériques pour générer un graphique.</p>
+            
+            <div style="margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <input type="text" id="graph-data-input" placeholder="Ex: -13.89, -16.95, 10, 25" style="flex: 1; background: #000; border: 1px solid #00ff66; color: #00ff66; padding: 10px; font-family: monospace;">
+                <button id="generate-graph-btn" style="background: #00ff66; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; font-family: monospace;">ANALYZER</button>
+            </div>
+
+            <div id="save-graph-zone" style="margin-bottom: 20px; display: none; gap: 10px;">
+                <input type="text" id="graph-name-input" placeholder="Nom du graphique (ex: Graphique_Test)..." style="flex: 1; background: #000; border: 1px solid #ff0055; color: #ff0055; padding: 10px; font-family: monospace;">
+                <button id="save-graph-btn" style="background: #ff0055; color: #fff; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; font-family: monospace;">SAUVEGARDER 💾</button>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.8); border: 1px solid #00ff66; padding: 15px; max-width: 600px; margin: 0 auto 30px auto; height: 300px; position: relative;">
+                <canvas id="cyber-canvas-chart"></canvas>
+            </div>
+
+            <h3>📂 GRAPHIQUES ENREGISTRÉS</h3>
+            <div id="saved-graphs-list" style="display: flex; flex-direction: column; gap: 10px; background: #050505; border: 1px dashed #00ff66; padding: 15px; min-height: 50px; font-family: monospace;">
+                </div>
+        </div>
+    </main>
+
+    <main id="config-section" class="tab-content">
+        <div class="store-container">
+            <h1>Configuration Système ⚙️</h1>
+            <p class="store-intro">Personnalisez l'apparence visuelle de votre terminal.</p>
+            
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--main-accent); padding: 20px; max-width: 500px; margin: 0 auto; font-family: monospace;">
+                <h3 style="margin-top: 0; border-bottom: 1px dashed var(--main-accent); padding-bottom: 10px; color: var(--main-accent);">🎨 THÈMES D'INTERFACE</h3>
+                <p style="font-size: 14px; color: #888;">Sélectionnez un profil colorimétrique :</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 15px;">
+                    <button class="theme-btn" data-theme="matrix" style="background: #000; color: #00ff66; border: 1px solid #00ff66; padding: 12px; cursor: pointer; font-family: monospace; font-weight: bold; text-align: left;">
+                        🟢 PROTOCOLE (Vert Classique)
+                    </button>
+                    <button class="theme-btn" data-theme="synthwave" style="background: #1a0826; color: #ff007f; border: 1px solid #ff007f; padding: 12px; cursor: pointer; font-family: monospace; font-weight: bold; text-align: left;">
+                        🟣 VIBRATION SYNTHWAVE (Néon Rose & Cyan)
+                    </button>
+                    <button class="theme-btn" data-theme="cyberpunk" style="background: #0c0f12; color: #fffe00; border: 1px solid #fffe00; padding: 12px; cursor: pointer; font-family: monospace; font-weight: bold; text-align: left;">
+                        🟡 Profil Tactique Ambre (Jaune & Bleu)
+                    </button>
+                    <button class="theme-btn" data-theme="hacktivist" style="background: #ffffff; color: #0066cc; border: 1px solid #0066cc; padding: 12px; cursor: pointer; font-family: monospace; font-weight: bold; text-align: left;">
+                        ⚪ INTERFACE ÉPURÉE (Blanc & Bleu Sombre)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
